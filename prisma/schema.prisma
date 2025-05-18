@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  // provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Invoice {
+  id                  String   @id
+  externalId          String
+  status              String
+  amount              Int
+  payerEmail          String
+  description         String
+  invoiceUrl          String?
+  paidAt              DateTime? // optional, karena awalnya null
+  createdAt           DateTime @default(now())
+}
