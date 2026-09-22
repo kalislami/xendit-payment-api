@@ -1,6 +1,7 @@
 # ---------- build stage ----------
-FROM node:23-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
+RUN apk add --no-cache openssl
 
 # install deps
 COPY package*.json tsconfig.json ./
@@ -13,8 +14,9 @@ RUN npx prisma generate
 RUN npm run build
 
 # ---------- production stage ----------
-FROM node:23-alpine
+FROM node:22-alpine
 WORKDIR /app
+RUN apk add --no-cache openssl
 
 ENV NODE_ENV=production
 
@@ -25,10 +27,9 @@ RUN npm ci --omit=dev
 # copy built files & prisma client
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/src/generated ./src/generated
+COPY --from=builder /app/src/generated ./dist/generated
 COPY prisma ./prisma
 
-# copy entry script (migrate & start)
 COPY docker-entry.sh .
 
 # buka port

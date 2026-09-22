@@ -1,13 +1,9 @@
 import { z } from 'zod';
-import { validate } from './validate';
-
-const schemaCreateInvoice = z.object({
-  external_id: z.string(),
-  amount: z.number(),
+export const createInvoiceSchema = z.object({
+  external_id: z.string().trim().min(1),
+  amount: z.number().int().positive().finite().max(2147483647),
   payer_email: z.string().email(),
-  description: z.string()
+  description: z.string().trim().min(1),
 });
 
-export const validationCreateInvoice = (reqBody: unknown) => {
-  return validate(schemaCreateInvoice, reqBody);
-};
+export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>;

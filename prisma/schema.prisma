@@ -4,19 +4,18 @@ generator client {
 }
 
 datasource db {
-  // provider = "sqlite"
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Invoice {
   id                  String   @id
-  externalId          String
+  externalId          String   @unique
   status              String
   amount              Int
   payerEmail          String
   description         String
   invoiceUrl          String?
-  paidAt              DateTime? // optional, karena awalnya null
+  paidAt              DateTime?
   createdAt           DateTime @default(now())
 }

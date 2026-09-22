@@ -1,5 +1,12 @@
 node_modules
 dist
 .prisma
+.env
+.git
+.agents
+.codex
+test
+src/generated
+coverage
 npm-debug.log
 .DS_Store
